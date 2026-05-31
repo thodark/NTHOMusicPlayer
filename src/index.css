@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100..900;1,100..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Unbounded:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-bg-matter: #06040f;
+  --color-panel-matter: #0f0d1a;
+  --color-panel-light: #1a1630;
+  --color-accent-matter: #b76cff;
+  --font-unbounded: 'Unbounded', sans-serif;
+  --font-plus: 'Be Vietnam Pro', 'Plus Jakarta Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Custom Base Configurations */
+body {
+  font-family: var(--font-plus);
+  background: 
+    radial-gradient(ellipse 60% 50% at 10% 0%, rgba(124, 60, 255, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 90% 10%, rgba(255, 79, 216, 0.16) 0%, transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(76, 26, 128, 0.14) 0%, transparent 70%),
+    #06040f;
+  color: #f0ecff;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.25;
+}
+
+/* Custom animations and performance metrics */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
+}
+
+/* Custom styles for equalizers */
+.eq-bar {
+  animation: eqBounce 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes eqBounce {
+  0% {
+    height: 4px;
+    opacity: 0.4;
+  }
+  100% {
+    height: 24px;
+    opacity: 1;
+  }
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(183, 108, 255, 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(183, 108, 255, 0.45);
+}
+
+/* Glowing text and badges */
+.logo-glow {
+  text-shadow: 0 0 15px rgba(183, 108, 255, 0.5);
+}
+
+.vinyl-grooves {
+  background: repeating-radial-gradient(
+    circle at 50%,
+    transparent 0px,
+    transparent 6px,
+    rgba(183, 108, 255, 0.04) 6px,
+    rgba(183, 108, 255, 0.04) 7px
+  );
+}
+
+/* Ensure font elements on cards are never compressed or dẹt */
+h1, h2, h3, a, span, button {
+  letter-spacing: normal;
+  transform: none !important; /* Block accidental stretch */
+}
+
+/* Force standard height for banner headers to block any platform layout distortions */
+.banner-heading-wrap {
+  display: block;
+  min-height: auto;
+}

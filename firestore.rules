@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net - Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Helper function to validate song document structure
+    function isValidSong(data, songId) {
+      return data.keys().hasAll(['id', 'title', 'artist', 'genre', 'audioSrc', 'coverSrc', 'createdAt'])
+        && data.keys().size() <= 14
+        && data.id == songId
+        && data.title is string && data.title.size() >= 1 && data.title.size() <= 200
+        && data.artist is string && data.artist.size() >= 1 && data.artist.size() <= 200
+        && data.genre is string && (data.genre == 'VN' || data.genre == 'US')
+        && data.audioSrc is string && data.audioSrc.size() <= 2048
+        && data.coverSrc is string && data.coverSrc.size() <= 2048
+        && data.createdAt == request.time
+        && (!data.keys().hasAny(['audioStoragePath']) || data.audioStoragePath == null || (data.audioStoragePath is string && data.audioStoragePath.size() <= 512))
+        && (!data.keys().hasAny(['coverStoragePath']) || data.coverStoragePath == null || (data.coverStoragePath is string && data.coverStoragePath.size() <= 512));
+    }
+
+    // 3. Songs collection security rules
+    match /songs/{songId} {
+      allow read: if true;
+
+      allow create: if request.auth != null
+        && songId is string && songId.size() <= 128
+        && isValidSong(request.resource.data, songId);
+
+      allow delete: if request.auth != null
+        && (resource.data.userId == request.auth.uid);
+
+      allow update: if false; // Uploaded music tracks are immutable
+    }
+  }
+}
